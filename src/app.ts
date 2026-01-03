@@ -1,12 +1,12 @@
 import express, { Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
-import connectDB from './config/database.js';
-import userRoutes from './routes/userRoutes.js';
-import walletRoutes from './routes/walletRoutes.js';
-import paymentRoutes from './routes/paymentRoutes.js';
-import actionRoutes from './routes/actionRoutes.js';
-import dataUpRoutes from './routes/dataUpRoutes.js';
-import { errorResponse } from './utils/response.js';
+import connectDB from './config/database';
+import userRoutes from './routes/userRoutes';
+import walletRoutes from './routes/walletRoutes';
+import paymentRoutes from './routes/paymentRoutes';
+import actionRoutes from './routes/actionRoutes';
+import dataUpRoutes from './routes/dataUpRoutes';
+import { errorResponse } from './utils/response';
 
 // Load environment variables
 dotenv.config();
@@ -21,7 +21,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Health check endpoint
-app.get('/health', (req: Request, res: Response) => {
+app.get('/health', (_req: Request, res: Response) => {
   res.status(200).json({
     success: true,
     message: 'Server is running',
@@ -37,12 +37,12 @@ app.use('/api/v1/action', actionRoutes);
 app.use('/api/v1/utilities', dataUpRoutes);
 
 // 404 handler
-app.use((req: Request, res: Response) => {
+app.use((_req: Request, res: Response) => {
   return errorResponse(res, 404, 'Route not found');
 });
 
 // Error handler
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
   console.error('Error:', err);
   return errorResponse(
     res,

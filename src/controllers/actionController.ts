@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import * as dataService from '../services/dataService.js';
-import { successResponse, errorResponse } from '../utils/response.js';
+import * as dataService from "../services/dataService";
+import { successResponse, errorResponse } from "../utils/response";
 
 export const getProductList = async (req: Request, res: Response): Promise<Response> => {
   try {

@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { renderTemplate } from '../utils/templateEngine.js';
+import { renderTemplate } from "../utils/templateEngine";
 
 interface EmailOptions {
   to: string;

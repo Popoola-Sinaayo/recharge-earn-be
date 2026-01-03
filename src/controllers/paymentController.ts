@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import * as paymentService from '../services/paymentService.js';
-import { successResponse, errorResponse } from '../utils/response.js';
-import { PaystackWebhookEvent } from '../types/index.js';
+import * as paymentService from "../services/paymentService";
+import { successResponse, errorResponse } from "../utils/response";
+import { PaystackWebhookEvent } from "../types/index";
 
 export const initializePayment = async (req: Request, res: Response): Promise<Response> => {
   try {

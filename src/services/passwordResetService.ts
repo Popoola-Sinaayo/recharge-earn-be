@@ -1,14 +1,20 @@
-import * as userRepository from '../repositories/userRepository.js';
-import * as otpService from './otpService.js';
-import { sendPasswordResetOtpEmail } from './emailService.js';
+import * as userRepository from "../repositories/userRepository";
+import * as otpService from "./otpService";
+import { sendPasswordResetOtpEmail } from "./emailService";
+import Otp from "../models/Otp";
 
 // Request password reset - send OTP
-export const requestPasswordReset = async (email: string): Promise<{ message: string }> => {
+export const requestPasswordReset = async (
+  email: string
+): Promise<{ message: string }> => {
   // Check if user exists
   const user = await userRepository.findUserByEmail(email);
   if (!user) {
     // Don't reveal if user exists or not for security
-    return { message: 'If an account with that email exists, a password reset OTP has been sent.' };
+    return {
+      message:
+        "If an account with that email exists, a password reset OTP has been sent.",
+    };
   }
 
   // Create OTP for password reset (without sending email)
@@ -19,12 +25,16 @@ export const requestPasswordReset = async (email: string): Promise<{ message: st
     await sendPasswordResetOtpEmail(email, user.firstName, otp);
   } catch (error) {
     // If email fails, delete the OTP record
-    const Otp = (await import('../models/Otp.js')).default;
     await Otp.deleteMany({ email: email.toLowerCase(), otp, isUsed: false });
-    throw new Error('Failed to send password reset OTP email. Please try again.');
+    throw new Error(
+      "Failed to send password reset OTP email. Please try again."
+    );
   }
 
-  return { message: 'If an account with that email exists, a password reset OTP has been sent.' };
+  return {
+    message:
+      "If an account with that email exists, a password reset OTP has been sent.",
+  };
 };
 
 // Reset password using OTP
@@ -36,13 +46,13 @@ export const resetPassword = async (
   // Verify OTP
   const isOtpValid = await otpService.verifyOtp(email, otp);
   if (!isOtpValid) {
-    throw new Error('Invalid or expired OTP');
+    throw new Error("Invalid or expired OTP");
   }
 
   // Find user by email
   const user = await userRepository.findUserByEmail(email);
   if (!user) {
-    throw new Error('User not found');
+    throw new Error("User not found");
   }
 
   // Update user password (Mongoose will hash it automatically)
@@ -50,6 +60,5 @@ export const resetPassword = async (
     password: newPassword,
   });
 
-  return { message: 'Password has been reset successfully' };
+  return { message: "Password has been reset successfully" };
 };
-

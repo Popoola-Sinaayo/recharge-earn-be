@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import { successResponse, errorResponse } from '../utils/response.js';
-import { dataUpRepository } from '../repositories/dataUpRepository.js';
+import { successResponse, errorResponse } from "../utils/response";
+import { dataUpRepository } from "../repositories/dataUpRepository";
 
-export const getDataPlans = async (req: Request, res: Response): Promise<Response> => {
+export const getDataPlans = async (_req: Request, res: Response): Promise<Response> => {
   try {
     const data = await dataUpRepository.getDataPlans();
     return successResponse(res, 200, 'Data plans retrieved successfully', data);

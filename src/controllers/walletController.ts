@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import * as walletService from '../services/walletService.js';
-import { successResponse, errorResponse } from '../utils/response.js';
+import * as walletService from "../services/walletService";
+import { successResponse, errorResponse } from "../utils/response";
 
 export const getBalance = async (req: Request, res: Response): Promise<Response> => {
   try {

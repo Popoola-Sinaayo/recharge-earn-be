@@ -1,5 +1,6 @@
 import { Types } from 'mongoose';
-import Wallet, { IWallet } from '../models/Wallet.js';
+import Wallet from '../models/Wallet';
+import { IWallet } from '../types/index';
 
 interface WalletData {
   userId: Types.ObjectId;

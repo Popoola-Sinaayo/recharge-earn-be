@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import * as userService from '../services/userService.js';
-import * as passwordResetService from '../services/passwordResetService.js';
-import { successResponse, errorResponse } from '../utils/response.js';
+import * as userService from "../services/userService";
+import * as passwordResetService from "../services/passwordResetService";
+import { successResponse, errorResponse } from "../utils/response";
 
 export const register = async (req: Request, res: Response): Promise<Response> => {
   try {

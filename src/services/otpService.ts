@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import Otp, { IOtp } from '../models/Otp';
+import Otp from '../models/Otp';
 import { sendOtpEmail } from './emailService';
 
 // Generate a 6-digit OTP
