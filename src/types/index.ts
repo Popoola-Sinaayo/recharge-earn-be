@@ -26,7 +26,7 @@ export interface IWallet extends Document {
 }
 
 export type TransactionType = 'credit' | 'debit';
-export type TransactionCategory = 'funding' | 'data_purchase' | 'refund' | 'withdrawal' | 'referral_reward';
+export type TransactionCategory = 'funding' | 'data_purchase' | 'airtime_purchase' | 'electricity_purchase' | 'cable_purchase' | 'refund' | 'withdrawal' | 'referral_reward';
 export type TransactionStatus = 'pending' | 'completed' | 'failed' | 'cancelled';
 
 export interface ITransaction extends Document {
@@ -41,6 +41,7 @@ export interface ITransaction extends Document {
   status: TransactionStatus;
   reference?: string;
   paystackReference?: string;
+  token?: string;
   description?: string;
   metadata?: Record<string, any>;
   createdAt: Date;

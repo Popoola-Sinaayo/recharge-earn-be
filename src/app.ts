@@ -38,7 +38,6 @@ app.use('/api/v1/payments', paymentRoutes);
 app.use('/api/v1/action', actionRoutes);
 app.use('/api/v1/utilities', dataUpRoutes);
 app.use("/api/v1/referrals", referralRoutes);
-app.use("/api/v1/referrals", referralRoutes);
 
 // 404 handler
 app.use((_req: Request, res: Response) => {

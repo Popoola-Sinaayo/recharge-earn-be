@@ -23,6 +23,9 @@ const transactionSchema = new Schema<ITransaction>(
       enum: [
         "funding",
         "data_purchase",
+        "airtime_purchase",
+        "electricity_purchase",
+        "cable_purchase",
         "refund",
         "withdrawal",
         "referral_reward",
@@ -53,6 +56,10 @@ const transactionSchema = new Schema<ITransaction>(
       sparse: true,
     },
     paystackReference: {
+      type: String,
+      sparse: true,
+    },
+    token: {
       type: String,
       sparse: true,
     },

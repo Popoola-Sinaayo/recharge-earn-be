@@ -30,7 +30,7 @@ export const creditWallet = async (
   const wallet = await walletRepository.findWalletByUserId(userId);
 
   if (!wallet) {
-    throw new Error('Wallet not found');
+    throw new Error("Wallet not found");
   }
 
   const balanceBefore = wallet.balance;
@@ -41,22 +41,23 @@ export const creditWallet = async (
 
   // Create transaction record
   const transaction = await transactionRepository.createTransaction({
-    userId: typeof userId === 'string' ? new Types.ObjectId(userId) : userId,
+    userId: typeof userId === "string" ? new Types.ObjectId(userId) : userId,
     walletId: wallet._id,
-    type: 'credit',
+    type: "credit",
     category,
     amount,
     balanceBefore,
     balanceAfter,
-    status: 'completed',
-    reference: generateReference('CR'),
-    description: metadata.description || 'Wallet credited',
+    status: "completed",
+    reference: generateReference("CR"),
+    description: metadata.description || "Wallet credited",
+    token: metadata.token,
     metadata,
   });
 
   const updatedWallet = await walletRepository.findWalletById(wallet._id);
   if (!updatedWallet) {
-    throw new Error('Wallet not found after update');
+    throw new Error("Wallet not found after update");
   }
 
   return { wallet: updatedWallet, transaction };
@@ -71,11 +72,11 @@ export const debitWallet = async (
   const wallet = await walletRepository.findWalletByUserId(userId);
 
   if (!wallet) {
-    throw new Error('Wallet not found');
+    throw new Error("Wallet not found");
   }
 
   if (wallet.balance < amount) {
-    throw new Error('Insufficient wallet balance');
+    throw new Error("Insufficient wallet balance");
   }
 
   const balanceBefore = wallet.balance;
@@ -86,22 +87,23 @@ export const debitWallet = async (
 
   // Create transaction record
   const transaction = await transactionRepository.createTransaction({
-    userId: typeof userId === 'string' ? new Types.ObjectId(userId) : userId,
+    userId: typeof userId === "string" ? new Types.ObjectId(userId) : userId,
     walletId: wallet._id,
-    type: 'debit',
+    type: "debit",
     category,
     amount,
     balanceBefore,
     balanceAfter,
-    status: 'completed',
-    reference: generateReference('DB'),
-    description: metadata.description || 'Wallet debited',
+    status: "completed",
+    reference: generateReference("DB"),
+    description: metadata.description || "Wallet debited",
+    token: metadata.token,
     metadata,
   });
 
   const updatedWallet = await walletRepository.findWalletById(wallet._id);
   if (!updatedWallet) {
-    throw new Error('Wallet not found after update');
+    throw new Error("Wallet not found after update");
   }
 
   return { wallet: updatedWallet, transaction };

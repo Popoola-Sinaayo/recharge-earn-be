@@ -14,6 +14,7 @@ interface TransactionData {
   status?: TransactionStatus;
   reference?: string;
   paystackReference?: string;
+  token?: string;
   description?: string;
   metadata?: Record<string, any>;
 }
