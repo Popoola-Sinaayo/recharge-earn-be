@@ -46,13 +46,15 @@ export const initializePayment = async (
         email,
         amount: amountInKobo,
         reference,
-        callback_url: `${process.env.APP_URL || 'http://localhost:3000'}/api/payments/verify`,
+        callback_url: `${
+          process.env.APP_URL || "http://localhost:3000"
+        }/payments/success`,
         metadata: {
           userId: userId.toString(),
           custom_fields: [
             {
-              display_name: 'User ID',
-              variable_name: 'user_id',
+              display_name: "User ID",
+              variable_name: "user_id",
               value: userId.toString(),
             },
           ],
@@ -61,7 +63,7 @@ export const initializePayment = async (
       {
         headers: {
           Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       }
     );
