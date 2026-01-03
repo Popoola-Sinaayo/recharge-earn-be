@@ -7,6 +7,7 @@ import paymentRoutes from './routes/paymentRoutes';
 import actionRoutes from './routes/actionRoutes';
 import dataUpRoutes from './routes/dataUpRoutes';
 import { errorResponse } from './utils/response';
+import cors from "cors"
 
 // Load environment variables
 dotenv.config();
@@ -19,7 +20,7 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(cors());
 // Health check endpoint
 app.get('/health', (_req: Request, res: Response) => {
   res.status(200).json({
