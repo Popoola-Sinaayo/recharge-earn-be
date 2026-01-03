@@ -7,6 +7,8 @@ export interface IUser extends Document {
   email: string;
   password: string;
   phone?: string;
+  referralCode?: string;
+  referredBy?: Types.ObjectId;
   isActive: boolean;
   isEmailVerified: boolean;
   comparePassword(candidatePassword: string): Promise<boolean>;
@@ -24,7 +26,7 @@ export interface IWallet extends Document {
 }
 
 export type TransactionType = 'credit' | 'debit';
-export type TransactionCategory = 'funding' | 'data_purchase' | 'refund' | 'withdrawal';
+export type TransactionCategory = 'funding' | 'data_purchase' | 'refund' | 'withdrawal' | 'referral_reward';
 export type TransactionStatus = 'pending' | 'completed' | 'failed' | 'cancelled';
 
 export interface ITransaction extends Document {
@@ -51,6 +53,7 @@ export interface RegisterUserData {
   email: string;
   password: string;
   phone?: string;
+  referralCode?: string;
 }
 
 export interface LoginData {

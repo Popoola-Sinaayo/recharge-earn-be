@@ -21,15 +21,19 @@ router.post(
 );
 
 router.post(
-  '/verify-otp',
+  "/verify-otp",
   [
-    body('email').isEmail().withMessage('Please provide a valid email'),
-    body('otp').notEmpty().withMessage('OTP is required'),
-    body('firstName').trim().notEmpty().withMessage('First name is required'),
-    body('lastName').trim().notEmpty().withMessage('Last name is required'),
-    body('password')
+    body("email").isEmail().withMessage("Please provide a valid email"),
+    body("otp").notEmpty().withMessage("OTP is required"),
+    body("firstName").trim().notEmpty().withMessage("First name is required"),
+    body("lastName").trim().notEmpty().withMessage("Last name is required"),
+    body("password")
       .isLength({ min: 6 })
-      .withMessage('Password must be at least 6 characters'),
+      .withMessage("Password must be at least 6 characters"),
+    body("referralCode")
+      .optional()
+      .matches(/^[A-Z0-9]{6}$/)
+      .withMessage("Referral code must be 6 alphanumeric characters"),
   ],
   validate,
   userController.verifyOtp

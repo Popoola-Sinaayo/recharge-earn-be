@@ -6,6 +6,7 @@ import walletRoutes from './routes/walletRoutes';
 import paymentRoutes from './routes/paymentRoutes';
 import actionRoutes from './routes/actionRoutes';
 import dataUpRoutes from './routes/dataUpRoutes';
+import referralRoutes from "./routes/referralRoutes";
 import { errorResponse } from './utils/response';
 import cors from "cors"
 
@@ -36,6 +37,8 @@ app.use('/api/v1/wallet', walletRoutes);
 app.use('/api/v1/payments', paymentRoutes);
 app.use('/api/v1/action', actionRoutes);
 app.use('/api/v1/utilities', dataUpRoutes);
+app.use("/api/v1/referrals", referralRoutes);
+app.use("/api/v1/referrals", referralRoutes);
 
 // 404 handler
 app.use((_req: Request, res: Response) => {

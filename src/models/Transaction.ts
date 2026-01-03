@@ -5,22 +5,28 @@ const transactionSchema = new Schema<ITransaction>(
   {
     userId: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
     },
     walletId: {
       type: Schema.Types.ObjectId,
-      ref: 'Wallet',
+      ref: "Wallet",
       required: true,
     },
     type: {
       type: String,
-      enum: ['credit', 'debit'],
+      enum: ["credit", "debit"],
       required: true,
     },
     category: {
       type: String,
-      enum: ['funding', 'data_purchase', 'refund', 'withdrawal'],
+      enum: [
+        "funding",
+        "data_purchase",
+        "refund",
+        "withdrawal",
+        "referral_reward",
+      ],
       required: true,
     },
     amount: {
@@ -38,8 +44,8 @@ const transactionSchema = new Schema<ITransaction>(
     },
     status: {
       type: String,
-      enum: ['pending', 'completed', 'failed', 'cancelled'],
-      default: 'pending',
+      enum: ["pending", "completed", "failed", "cancelled"],
+      default: "pending",
     },
     reference: {
       type: String,

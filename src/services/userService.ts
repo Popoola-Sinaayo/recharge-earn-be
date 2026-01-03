@@ -3,6 +3,10 @@ import * as userRepository from '../repositories/userRepository';
 import * as walletRepository from '../repositories/walletRepository';
 import * as otpService from './otpService';
 import { generateToken } from '../utils/jwt';
+import {
+  generateReferralCode,
+  isValidReferralCode,
+} from "../utils/generateReferralCode";
 import { RegisterUserData, AuthResponse, IUser } from '../types/index';
 
 // Initiate registration - send OTP
@@ -33,12 +37,38 @@ export const completeRegistration = async (
   // Verify OTP
   const isOtpValid = await otpService.verifyOtp(userData.email, otp);
   if (!isOtpValid) {
-    throw new Error('Invalid or expired OTP');
+    throw new Error("Invalid or expired OTP");
+  }
+
+  // Handle referral code if provided
+  let referredBy: Types.ObjectId | undefined = undefined;
+  if (userData.referralCode) {
+    if (!isValidReferralCode(userData.referralCode)) {
+      throw new Error("Invalid referral code format");
+    }
+    const referrer = await userRepository.findUserByReferralCode(
+      userData.referralCode
+    );
+    if (!referrer) {
+      throw new Error("Invalid referral code");
+    }
+    if (referrer.email === userData.email) {
+      throw new Error("You cannot use your own referral code");
+    }
+    referredBy = referrer._id;
+  }
+
+  // Generate unique referral code for new user
+  let referralCode = generateReferralCode();
+  let codeExists = await userRepository.findUserByReferralCode(referralCode);
+  while (codeExists) {
+    referralCode = generateReferralCode();
+    codeExists = await userRepository.findUserByReferralCode(referralCode);
   }
 
   // Check if user already exists (unverified)
   let user = await userRepository.findUserByEmail(userData.email);
-  
+
   if (user && !user.isEmailVerified) {
     // Update existing unverified user
     user = await userRepository.updateUser(user._id, {
@@ -46,24 +76,33 @@ export const completeRegistration = async (
       lastName: userData.lastName,
       password: userData.password,
       phone: userData.phone,
+      referralCode,
+      referredBy,
       isEmailVerified: true,
       isActive: true,
     });
     if (!user) {
-      throw new Error('Failed to update user');
+      throw new Error("Failed to update user");
     }
   } else if (!user) {
-    // Create new user
-    user = await userRepository.createUser(userData);
+    // Create new user with referral code
+    const createData: any = {
+      ...userData,
+      referralCode,
+    };
+    if (referredBy) {
+      createData.referredBy = referredBy;
+    }
+    user = await userRepository.createUser(createData);
     // Update to set email as verified
     user = await userRepository.updateUser(user._id, {
       isEmailVerified: true,
     });
     if (!user) {
-      throw new Error('Failed to create user');
+      throw new Error("Failed to create user");
     }
   } else {
-    throw new Error('User with this email already exists');
+    throw new Error("User with this email already exists");
   }
 
   // Create wallet for user (if it doesn't exist)
@@ -72,7 +111,7 @@ export const completeRegistration = async (
     await walletRepository.createWallet({
       userId: user._id,
       balance: 0,
-      currency: 'NGN',
+      currency: "NGN",
     });
   }
 
@@ -83,7 +122,7 @@ export const completeRegistration = async (
   const userResponse = user.toObject() as any;
   delete userResponse.password;
 
-  return { user: userResponse as Omit<IUser, 'password'>, token };
+  return { user: userResponse as Omit<IUser, "password">, token };
 };
 
 

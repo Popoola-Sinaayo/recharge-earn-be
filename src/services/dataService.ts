@@ -1,5 +1,6 @@
 import { Types } from 'mongoose';
 import * as walletService from './walletService';
+import * as referralService from "./referralService";
 import { dataUpClient } from '../request/dataUpClient';
 
 interface Product {
@@ -53,29 +54,26 @@ export const purchaseData = async (
   try {
     // First, get product details to know the price
     const products = await getProductList();
-    const productList = Array.isArray(products.data) ? products.data : [products.data];
+    const productList = Array.isArray(products.data)
+      ? products.data
+      : [products.data];
     const product = productList.find(
       (p: Product) => p.id === productId || p.product_id === productId
     );
 
     if (!product) {
-      throw new Error('Product not found');
+      throw new Error("Product not found");
     }
 
     const amount = product.price || product.amount || 0;
 
     // Check wallet balance and debit
-    await walletService.debitWallet(
-      userId,
-      amount,
-      'data_purchase',
-      {
-        productId,
-        phoneNumber,
-        network: network || product.network,
-        description: `Data purchase: ${product.name || product.product_name}`,
-      }
-    );
+    await walletService.debitWallet(userId, amount, "data_purchase", {
+      productId,
+      phoneNumber,
+      network: network || product.network,
+      description: `Data purchase: ${product.name || product.product_name}`,
+    });
 
     // Make purchase request to Data Up API
     const purchaseData = {
@@ -85,25 +83,28 @@ export const purchaseData = async (
     };
 
     const response = await dataUpClient.post<PurchaseResponse>(
-      '/purchase',
+      "/purchase",
       purchaseData
     );
 
     // If purchase fails, refund the wallet
-    if (!response.data.status || response.data.status !== 'success') {
+    if (!response.data.status || response.data.status !== "success") {
       // Refund the amount
-      await walletService.creditWallet(
-        userId,
-        amount,
-        'refund',
-        {
-          originalTransaction: 'data_purchase',
-          reason: 'Third-party API purchase failed',
-          thirdPartyResponse: response.data,
-        }
-      );
-      throw new Error(response.data.message || 'Purchase failed');
+      await walletService.creditWallet(userId, amount, "refund", {
+        originalTransaction: "data_purchase",
+        reason: "Third-party API purchase failed",
+        thirdPartyResponse: response.data,
+      });
+      throw new Error(response.data.message || "Purchase failed");
     }
+
+    // Process referral reward after successful purchase
+    await referralService.processReferralReward(userId, amount, "data", {
+      productId,
+      phoneNumber,
+      network: network || product.network,
+      reference: response.data.data?.reference || response.data.reference,
+    });
 
     return {
       success: true,

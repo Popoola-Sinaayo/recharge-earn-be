@@ -18,8 +18,14 @@ export const findUserById = async (userId: Types.ObjectId | string): Promise<IUs
 
 export const updateUser = async (
   userId: Types.ObjectId | string,
-  updateData: Partial<RegisterUserData> & { isEmailVerified?: boolean; isActive?: boolean }
+  updateData: Partial<IUser>
 ): Promise<IUser | null> => {
   return await User.findByIdAndUpdate(userId, updateData, { new: true });
+};
+
+export const findUserByReferralCode = async (
+  referralCode: string
+): Promise<IUser | null> => {
+  return await User.findOne({ referralCode: referralCode.toUpperCase() });
 };
 

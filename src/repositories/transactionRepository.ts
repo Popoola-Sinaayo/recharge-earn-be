@@ -1,13 +1,13 @@
 import { Types } from 'mongoose';
 import Transaction from '../models/Transaction';
-import { ITransaction } from '../types';
+import { ITransaction, TransactionCategory } from "../types";
 import { TransactionStatus } from '../types';
 
 interface TransactionData {
   userId: Types.ObjectId;
   walletId: Types.ObjectId;
-  type: 'credit' | 'debit';
-  category: 'funding' | 'data_purchase' | 'refund' | 'withdrawal';
+  type: "credit" | "debit";
+  category: TransactionCategory;
   amount: number;
   balanceBefore: number;
   balanceAfter: number;
