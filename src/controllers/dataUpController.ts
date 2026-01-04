@@ -42,7 +42,7 @@ export const purchaseData = async (
 
     // Find the plan to get its price
     if (dataPlans) {
-      const plan = dataPlans.data.data_plans[network].find(
+      const plan = dataPlans[network].find(
         (p: any) => p.id === Number(plan_id)
       );
       if (plan) {

@@ -276,7 +276,7 @@ class DataUpRepository {
         }
       );
 
-      return response.data;
+      return response.data.data;
     } catch (error: any) {
       if (error.response?.status === 401) {
         this.token = null;
