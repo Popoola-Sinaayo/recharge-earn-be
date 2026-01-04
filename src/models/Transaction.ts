@@ -66,6 +66,10 @@ const transactionSchema = new Schema<ITransaction>(
     description: {
       type: String,
     },
+    externalReference: {
+      type: String,
+      sparse: true,
+    },
     metadata: {
       type: Schema.Types.Mixed,
     },

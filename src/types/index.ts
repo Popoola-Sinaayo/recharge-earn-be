@@ -46,6 +46,7 @@ export interface ITransaction extends Document {
   metadata?: Record<string, any>;
   createdAt: Date;
   updatedAt: Date;
+  externalReference?: string;
 }
 
 export interface RegisterUserData {

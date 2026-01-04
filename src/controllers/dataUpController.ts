@@ -328,6 +328,14 @@ export const purchaseElectricity = async (
       await Transaction.findByIdAndUpdate(transaction._id, { token });
     }
 
+    // Update transaction with external reference if available
+    if (data.data?.id && transaction) {
+      const Transaction = (await import("../models/Transaction")).default;
+      await Transaction.findByIdAndUpdate(transaction._id, {
+        externalReference: data.data.id,
+      });
+    }
+
     // Process referral reward after successful purchase
     if (purchaseAmount > 0) {
       await referralService.processReferralReward(
