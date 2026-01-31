@@ -13,9 +13,6 @@ import cors from "cors"
 // Load environment variables
 dotenv.config();
 
-// Connect to database
-connectDB();
-
 const app = express();
 
 // Middleware
@@ -56,11 +53,15 @@ app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-  console.log(
-    `Server running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`
-  );
-});
+// Only connect to DB and start server when run directly (not when imported for tests)
+if (require.main === module) {
+  connectDB();
+  app.listen(PORT, () => {
+    console.log(
+      `Server running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`
+    );
+  });
+}
 
 export default app;
 
