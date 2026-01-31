@@ -25,7 +25,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 sh "node --version || (echo 'Node not found' && exit 1)"
-                sh 'npm ci'
+                sh 'npm install'
             }
         }
 
