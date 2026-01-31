@@ -8,6 +8,38 @@ pipeline {
     environment {
         NODE_VERSION = '20'
         APP_NAME = 'recharge-earn-be'
+
+        // Server
+        PORT = '3000'
+        NODE_ENV = 'test'
+
+        // MongoDB
+        MONGODB_URI = 'mongodb://localhost:27017/recharge-earn'
+
+        // JWT
+        JWT_SECRET = 'dummy-jwt-secret-for-ci'
+        JWT_EXPIRES_IN = '7d'
+
+        // Paystack
+        PAYSTACK_SECRET_KEY = 'sk_test_xxx'
+        PAYSTACK_PUBLIC_KEY = 'pk_test_xxx'
+        PAYSTACK_WEBHOOK_SECRET = 'whsec_xxx'
+
+        // Data Up API
+        DATA_UP_BASE_URL = 'https://api.dataup.com'
+        DATA_UP_IDENTIFIER = 'your_identifier'
+        DATA_UP_PASSWORD = 'your_password'
+
+        // App URL
+        APP_URL = 'http://localhost:3000'
+
+        // SMTP
+        SMTP_HOST = 'smtp.gmail.com'
+        SMTP_PORT = '587'
+        SMTP_SECURE = 'false'
+        SMTP_USER = 'ci-dummy@gmail.com'
+        SMTP_PASS = 'your-app-password'
+        SMTP_FROM_NAME = 'Recharge Earn'
     }
 
     options {
